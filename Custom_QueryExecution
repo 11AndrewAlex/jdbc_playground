@@ -1,0 +1,50 @@
+    private final String dbAccess = "your_username";
+    private final String dbPassword = "your_password";
+    private final String dbName = "your_db";
+    private String connectionStr = "";
+    
+    public CoreSQL() {
+        buildConnectionStr();
+    }
+    
+    public void insertQuery() {
+        
+        try {
+            Connection jdbcConnection = DriverManager.getConnection(connectionStr, dbAccess, dbPassword);
+            Statement queryStatement = jdbcConnection.createStatement();
+        }
+        
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public String executeQuery(String statement, String col) {
+        
+        String data = "";
+        
+        try {
+            Connection jdbcConnection = DriverManager.getConnection(connectionStr, dbAccess, dbPassword);
+            Statement queryStatement = jdbcConnection.createStatement();
+            
+            ResultSet rs = queryStatement.executeQuery(statement);
+            
+            //This method only returns a single line of data, but could be modified to handle large lists of data.
+            while (rs.next()) {
+                data = rs.getString(col);
+            }
+            
+        }
+        
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return data;
+    }
+    
+    private void buildConnectionStr() {
+    
+        //Edit this line according to your MySQL Database Server, in this case I am self-hosted using XAMPP
+        connectionStr = "jdbc:mysql://localhost:3306/"+ dbName;
+    }
